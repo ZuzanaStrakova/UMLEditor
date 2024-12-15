@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UMLEditor.Interfaces;
+using UMLEditor.Components.UML.Enums;
+using Newtonsoft.Json.Linq;
 
 namespace UMLEditor.Components.UML
 {
@@ -14,85 +16,83 @@ namespace UMLEditor.Components.UML
         public UmlObject StartObject { get; set; } = EmptyObject;
         public UmlObject EndObject { get; set; } = EmptyObject;
 
-        public ConnectionType StartType { get; set; }
-        public ConnectionType EndType { get; set; }
+        public ConnectionType StartType 
+        { 
+            get => ((UmlLineEnding)Children[0]).Type; 
+            set => ((UmlLineEnding)Children[0]).Type = value; 
+        }
+        public ConnectionType EndType 
+        { 
+            get => ((UmlLineEnding)Children[1]).Type; 
+            set => ((UmlLineEnding)Children[1]).Type = value; 
+        }
 
-        public Multiplicity StartMultiplicity { get; set; }
-        public Multiplicity EndMultiplicity { get; set; }
+        public Multiplicity StartMultiplicity
+        {
+            get => ((UmlLineEnding)Children[0]).Multiplicity;
+            set => ((UmlLineEnding)Children[0]).Multiplicity = value;
+        }
+        public Multiplicity EndMultiplicity
+        {
+            get => ((UmlLineEnding)Children[1]).Multiplicity;
+            set => ((UmlLineEnding)Children[1]).Multiplicity = value;
+        }
 
 
+        public UmlConnector(UmlObject startObject, UmlObject endObject, ConnectionType startType, ConnectionType endType, Multiplicity startMultiplicity, Multiplicity endMultiplicity) : this()
+        {
+            StartObject = startObject;
+            EndObject = endObject;
+            StartType = startType;
+            EndType = endType;
+            StartMultiplicity = startMultiplicity;
+            EndMultiplicity = endMultiplicity;
+        }
+
+        public UmlConnector()
+        {
+            UmlLineEnding startEnding = new UmlLineEnding();
+            UmlLineEnding endEnding = new UmlLineEnding();
+
+            Children.Add(startEnding);
+            Children.Add(endEnding);
+        }
 
         public override void Draw(Graphics g)
         {
-            PointF startPoint = new PointF(StartObject.MiddlePoint.X, StartObject.MiddlePoint.Y + StartObject.Size.Width / 2);
-            PointF endPoint = new PointF(EndObject.MiddlePoint.X, EndObject.MiddlePoint.Y + EndObject.Size.Width / 2);
+            PointF startPoint = ((UmlLineEnding)Children[0]).ConnectionPoint;
+            PointF endPoint = ((UmlLineEnding)Children[1]).ConnectionPoint;
 
             Pen pen = Selected ? new Pen(Color.CornflowerBlue) : new Pen(Color.Black);
 
             g.DrawLine(pen, startPoint, endPoint);
-            
-            switch (StartType)
-            {
-                case ConnectionType.Association:
-                    break;
-                case ConnectionType.OneWayAssociation: 
-                    g.DrawLine(pen, startPoint, startPoint + new SizeF(5, 5));
-                    g.DrawLine(pen, startPoint, startPoint + new SizeF(5, -5));
-                    break;
-                case ConnectionType.Aggregation:
-                    g.DrawLine(pen, startPoint, startPoint + new SizeF(5, 5));
-                    g.DrawLine(pen, startPoint, startPoint + new SizeF(5, -5));
-                    g.DrawLine(pen, startPoint + new SizeF(10, 0), startPoint + new SizeF(5, 5));
-                    g.DrawLine(pen, startPoint + new SizeF(10, 0), startPoint + new SizeF(5, -5));
-                    break;
-                case ConnectionType.Composition: 
-                    break;
-                case ConnectionType.Generalization: 
-                    break;
-            }
+
+            base.Draw(g);    // vykreslení vnořených komponent    
         }
 
-        public string GetSourceCode()
+        public override string GetSourceCode()
         {
             throw new NotImplementedException();
         }
 
-        public string IsInCollision()
+        public override string IsInCollision()
         {
             throw new NotImplementedException();
         }
 
-        public void Move(int x, int y)
+        public override void Move(int x, int y)
         {
             throw new NotImplementedException();
         }
 
-        public void Select()
+        public override void Select()
         {
             throw new NotImplementedException();
         }
 
-        public void Unselect()
+        public override void Unselect()
         {
             throw new NotImplementedException();
         }
-    }
-
-    public enum ConnectionType
-    {
-        Association,            // multiplicita (čára bez zakončení)
-        OneWayAssociation,      // jednosměrná asociace (šipka)
-        Aggregation,            // agregace (prázdný kosočtverec)
-        Composition,            // kompozice (plný kosočtverec)
-        Generalization          // generalizace (prázdný trojúhelník)
-    }
-
-    public enum Multiplicity
-    {
-        One,                    // 1
-        ZeroOrOne,              // 0..1
-        Many,                   // *
-        ZeroOrMany,             // 0..*
-        OneOrMany               // 1..*
     }
 }

@@ -22,7 +22,8 @@ namespace UMLEditor.Components.UML
 
         public override void Draw(Graphics g)
         {
-            throw new NotImplementedException();
+            g.DrawRectangle(Pens.Black, Position.X, Position.Y, Size.Height, Size.Width);
+            base.Draw(g);
         }
 
         public override string GetSourceCode()

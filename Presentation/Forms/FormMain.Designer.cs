@@ -38,9 +38,9 @@
             panel1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             panel1.AutoScroll = true;
             panel1.Controls.Add(canvasControl1);
-            panel1.Location = new Point(12, 12);
+            panel1.Location = new Point(12, 34);
             panel1.Name = "panel1";
-            panel1.Size = new Size(776, 426);
+            panel1.Size = new Size(776, 404);
             panel1.TabIndex = 0;
             // 
             // canvasControl1
@@ -58,6 +58,8 @@
             Controls.Add(panel1);
             Name = "FormMain";
             Text = "UML designer";
+            Load += FormMain_Load;
+            Paint += FormMain_Paint;
             panel1.ResumeLayout(false);
             ResumeLayout(false);
         }

@@ -9,11 +9,6 @@ namespace UMLEditor.Components.UML
 {
     public class UmlDiagram : UmlObject
     {
-        public List<UmlClass> classes { get; set; } = new List<UmlClass>();  
-
-        public List<UmlConnector> connectors { get; set; } = new List<UmlConnector>();
-
-
         public string SerializeToJSON()
         {
             return JsonConvert.SerializeObject(this);
@@ -36,15 +31,7 @@ namespace UMLEditor.Components.UML
 
         public override void Draw(Graphics g)
         {
-            foreach (UmlClass c in classes)
-            {
-                c.Draw(g);
-            }
-
-            foreach (UmlConnector c in connectors)
-            {
-                c.Draw(g);
-            }
+            base.Draw(g);
         }
     }
 }
