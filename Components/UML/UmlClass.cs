@@ -14,15 +14,40 @@ namespace UMLEditor.Components.UML
     {
         public string ClassName { get; set; } = string.Empty;
 
-        public List<PropertyDef> Properties { get; set; } = new List<PropertyDef>();
+        public List<string> Properties { get; set; } = new List<string>();
 
-        public List<MethodDef> Methods { get; set; } = new List<MethodDef>();
+        public List<string> Methods { get; set; } = new List<string>();
 
 
+
+        public UmlClass(string className)
+        {
+            this.Size = new SizeF(100, 100);
+
+            ClassName = className;
+            UmlText text = new UmlText();
+            text.Text = className;
+            text.Position = new PointF(0, 0);
+            text.Size = new SizeF(this.Size.Width, text.Font.Size * 1.2f);
+
+            Children.Add(text);
+        }
+
+
+        public void AddMethod(string item)
+        {
+            UmlObject lastChild = Children.Last();
+
+            UmlText text = new UmlText();
+            text.Text = item;
+            text.Position = new PointF(0, lastChild.Position.Y + lastChild.Size.Height);
+            text.Size = new SizeF(this.Size.Width, text.Font.Size * 1.2f);
+        }
 
         public override void Draw(Graphics g)
         {
-            g.DrawRectangle(Pens.Black, Position.X, Position.Y, Size.Height, Size.Width);
+            g.DrawRectangle(Pens.Black, 0, 0, Size.Height, Size.Width);
+
             base.Draw(g);
         }
 
