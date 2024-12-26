@@ -18,6 +18,10 @@ namespace UMLEditor.Components.UML
         private PointF BottomMiddlePoint { get => new PointF(Size.Width / 2, Size.Height); }
         public PointF ConnectionPoint { get => new PointF(Size.Width * 3 / 2, Size.Height / 2); }
 
+        public UmlLineEnding(UmlObject parent) : base(parent)
+        {
+
+        }
 
         public override void Draw(Graphics g)
         {

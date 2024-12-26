@@ -13,9 +13,9 @@ namespace UMLEditor
 
         private void FormMain_Load(object sender, EventArgs e)
         {
-            UmlClass class1 = new UmlClass("Client");
-            UmlClass class2 = new UmlClass("IPerson");
-            UmlConnector connector = new UmlConnector();
+            UmlClass class1 = new UmlClass(diagram, "Client");
+            UmlClass class2 = new UmlClass(diagram, "IPerson");
+            UmlConnector connector = new UmlConnector(diagram);
 
             diagram.Position = new PointF(0, 0);
             diagram.Size = new SizeF(1000, 1000);
@@ -25,17 +25,11 @@ namespace UMLEditor
             class2.Size = new SizeF(100, 180);
 
 
+            class1.AddMember("int Id");
+            class1.AddMember("string Prijmeni");
+            class1.AddMember("string Jmeno");
+            class1.AddMember("DateTime DatumNarozeni");
 
-            for (int i = 0; i < 10; i++)
-            {
-                var text = new UmlText() { Text = i.ToString() };
-                text.Position = new PointF(i * 2, i * 20);
-                text.Border = true;
-                text.Size = new SizeF(50, 18);
-
-
-                class1.Children.Add(text);
-            }
 
             diagram.Children.Add(class1);
             diagram.Children.Add(class2);

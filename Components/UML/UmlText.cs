@@ -16,6 +16,11 @@ namespace UMLEditor.Components.UML
         public Pen Pen { get; set; } = Pens.Black;
 
 
+        public UmlText(UmlObject parent) : base(parent)
+        {
+
+        }
+
         public override void Draw(Graphics g)
         {
             RectangleF rectangle = new RectangleF(0, 0, Size.Width, Size.Height);

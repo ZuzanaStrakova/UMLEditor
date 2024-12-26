@@ -9,6 +9,11 @@ namespace UMLEditor.Components.UML
 {
     public class UmlDiagram : UmlObject
     {
+        public UmlDiagram() : base(null)
+        {
+
+        }
+
         public string SerializeToJSON()
         {
             return JsonConvert.SerializeObject(this);

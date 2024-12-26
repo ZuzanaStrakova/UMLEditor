@@ -20,33 +20,38 @@ namespace UMLEditor.Components.UML
 
 
 
-        public UmlClass(string className)
+        public UmlClass(UmlObject parent, string className) : base(parent)
         {
-            this.Size = new SizeF(100, 100);
-
+            Size = new SizeF(100, 100);
             ClassName = className;
-            UmlText text = new UmlText();
-            text.Text = className;
-            text.Position = new PointF(0, 0);
-            text.Size = new SizeF(this.Size.Width, text.Font.Size * 1.2f);
 
-            Children.Add(text);
+            //UmlText text = new UmlText();
+            //text.Text = className;
+            //text.Position = new PointF(0, 0);
+            //text.Size = new SizeF(this.Size.Width, text.Font.Size * 1.2f);
+
+            //Children.Add(text);
         }
 
 
-        public void AddMethod(string item)
+        public void AddMember(string item)
         {
-            UmlObject lastChild = Children.Last();
+            UmlObject? lastChild = Children.LastOrDefault();
 
-            UmlText text = new UmlText();
+            float y = 0;
+
+            if (lastChild != null)
+                y = lastChild.Position.Y + lastChild.Size.Height;
+
+            UmlClassMember text = new UmlClassMember(this);
             text.Text = item;
-            text.Position = new PointF(0, lastChild.Position.Y + lastChild.Size.Height);
+            text.Position = new PointF(0, y);
             text.Size = new SizeF(this.Size.Width, text.Font.Size * 1.2f);
         }
 
         public override void Draw(Graphics g)
         {
-            g.DrawRectangle(Pens.Black, 0, 0, Size.Height, Size.Width);
+            g.DrawRectangle(Pens.Black, 0, 0, Size.Width, Size.Height);
 
             base.Draw(g);
         }

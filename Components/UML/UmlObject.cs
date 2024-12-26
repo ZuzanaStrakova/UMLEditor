@@ -15,8 +15,14 @@ namespace UMLEditor.Components.UML
         public List<UmlObject> Children { get; set; } = new List<UmlObject>();
         public bool Selected { get; set; }
         public PointF MiddlePoint { get => Position + Size / 2; }
-        public SizeF Size { get; set; }
-        public PointF Position { get; set; }
+        public virtual SizeF Size { get; set; }
+        public virtual PointF Position { get; set; }
+
+        protected UmlObject(UmlObject? parent)
+        {
+            Parent = parent;
+        }
+
 
         public virtual void Draw(Graphics g)
         {

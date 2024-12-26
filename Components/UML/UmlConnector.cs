@@ -11,7 +11,7 @@ namespace UMLEditor.Components.UML
 {
     public class UmlConnector : UmlObject
     {
-        public static UmlConnector EmptyObject { get; set; } = new UmlConnector();
+        public static UmlConnector EmptyObject { get; set; } = new UmlConnector(null);
 
         public UmlObject StartObject { get; set; } = EmptyObject;
         public UmlObject EndObject { get; set; } = EmptyObject;
@@ -39,7 +39,7 @@ namespace UMLEditor.Components.UML
         }
 
 
-        public UmlConnector(UmlObject startObject, UmlObject endObject, ConnectionType startType, ConnectionType endType, Multiplicity startMultiplicity, Multiplicity endMultiplicity) : this()
+        public UmlConnector(UmlObject parent, UmlObject startObject, UmlObject endObject, ConnectionType startType, ConnectionType endType, Multiplicity startMultiplicity, Multiplicity endMultiplicity) : this(parent)
         {
             StartObject = startObject;
             EndObject = endObject;
@@ -49,10 +49,10 @@ namespace UMLEditor.Components.UML
             EndMultiplicity = endMultiplicity;
         }
 
-        public UmlConnector()
+        public UmlConnector(UmlObject parent) : base(parent)
         {
-            UmlLineEnding startEnding = new UmlLineEnding();
-            UmlLineEnding endEnding = new UmlLineEnding();
+            UmlLineEnding startEnding = new UmlLineEnding(this);
+            UmlLineEnding endEnding = new UmlLineEnding(this);
 
             Children.Add(startEnding);
             Children.Add(endEnding);
