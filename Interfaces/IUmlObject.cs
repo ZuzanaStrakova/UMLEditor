@@ -12,14 +12,13 @@ namespace UMLEditor.Interfaces
         public UmlObject? Parent { get; set; }
         public List<UmlObject> Children { get; set; }
         public bool Selected { get; set; }
-        public PointF MiddlePoint { get; }
         public SizeF Size { get; set; }
         public PointF Position { get; set; }
 
 
         string GetSourceCode();
 
-        string IsInCollision();
+        public abstract bool IsInCollision(float x, float y);
 
         void Select();
 
@@ -27,7 +26,7 @@ namespace UMLEditor.Interfaces
 
         void Draw(Graphics g);
 
-        public abstract void Move(int x, int y);
+        public abstract void Move(float x, float y);
 
         //public abstract void Resize(int x, int y);
     }

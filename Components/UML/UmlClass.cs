@@ -18,6 +18,8 @@ namespace UMLEditor.Components.UML
 
         public List<string> Methods { get; set; } = new List<string>();
 
+        public bool Collapsed { get; set; } = false;
+
 
 
         public UmlClass(UmlObject parent, string className) : base(parent)
@@ -31,6 +33,8 @@ namespace UMLEditor.Components.UML
             //text.Size = new SizeF(this.Size.Width, text.Font.Size * 1.2f);
 
             //Children.Add(text);
+            Children.Add(new UmlCollapseButton(this));
+            Children.Add(new UmlResizeHandle(this));
         }
 
 
@@ -51,7 +55,9 @@ namespace UMLEditor.Components.UML
 
         public override void Draw(Graphics g)
         {
-            g.DrawRectangle(Pens.Black, 0, 0, Size.Width, Size.Height);
+            g.FillRectangle(Brushes.White, 0, 0, Size.Width, Size.Height);
+
+            g.DrawRectangle(Selected ? Pens.Red : Pens.Black, 0, 0, Size.Width, Size.Height);
 
             base.Draw(g);
         }
@@ -61,24 +67,5 @@ namespace UMLEditor.Components.UML
             throw new NotImplementedException();
         }
 
-        public override string IsInCollision()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void Move(int x, int y)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void Select()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void Unselect()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

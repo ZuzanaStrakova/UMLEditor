@@ -9,7 +9,7 @@ namespace UMLEditor.Components.UML
 {
     public class UmlText : UmlObject
     {
-        public string Text { get; set; } = string.Empty;
+        public virtual string Text { get; set; } = string.Empty;
         public bool Border { get; set; } = false;
         public Font Font { get; set; } = new Font("Courier", 12);
         public Brush Brush { get; set; } = Brushes.Black;
@@ -40,26 +40,6 @@ namespace UMLEditor.Components.UML
         }
 
         public override string GetSourceCode()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override string IsInCollision()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void Move(int x, int y)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void Select()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void Unselect()
         {
             throw new NotImplementedException();
         }

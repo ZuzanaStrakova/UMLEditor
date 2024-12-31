@@ -67,7 +67,7 @@ namespace UMLEditor.Components.UML
 
             g.DrawLine(pen, startPoint, endPoint);
 
-            base.Draw(g);    // vykreslení vnořených komponent    
+            base.Draw(g);   // vykreslení vnořených komponent    
         }
 
         public override string GetSourceCode()
@@ -75,24 +75,5 @@ namespace UMLEditor.Components.UML
             throw new NotImplementedException();
         }
 
-        public override string IsInCollision()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void Move(int x, int y)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void Select()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void Unselect()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

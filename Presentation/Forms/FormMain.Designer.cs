@@ -29,26 +29,32 @@
         private void InitializeComponent()
         {
             panel1 = new Panel();
-            canvasControl1 = new CanvasControl();
+            pictureBox = new PictureBox();
             panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox).BeginInit();
             SuspendLayout();
             // 
             // panel1
             // 
             panel1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             panel1.AutoScroll = true;
-            panel1.Controls.Add(canvasControl1);
+            panel1.Controls.Add(pictureBox);
             panel1.Location = new Point(12, 34);
             panel1.Name = "panel1";
             panel1.Size = new Size(776, 404);
             panel1.TabIndex = 0;
             // 
-            // canvasControl1
+            // pictureBox
             // 
-            canvasControl1.Location = new Point(0, 0);
-            canvasControl1.Name = "canvasControl1";
-            canvasControl1.Size = new Size(2000, 2000);
-            canvasControl1.TabIndex = 0;
+            pictureBox.Location = new Point(0, 0);
+            pictureBox.Name = "pictureBox";
+            pictureBox.Size = new Size(2000, 2000);
+            pictureBox.TabIndex = 0;
+            pictureBox.TabStop = false;
+            pictureBox.Paint += pictureBox_Paint;
+            pictureBox.MouseDown += pictureBox_MouseDown;
+            pictureBox.MouseMove += pictureBox_MouseMove;
+            pictureBox.MouseUp += pictureBox_MouseUp;
             // 
             // FormMain
             // 
@@ -59,14 +65,14 @@
             Name = "FormMain";
             Text = "UML designer";
             Load += FormMain_Load;
-            Paint += FormMain_Paint;
             panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)pictureBox).EndInit();
             ResumeLayout(false);
         }
 
         #endregion
 
         private Panel panel1;
-        private CanvasControl canvasControl1;
+        private PictureBox pictureBox;
     }
 }

@@ -92,7 +92,7 @@ namespace UMLEditor.Components.UML
 
         private void DrawGeneralization(Graphics g, Direction direction, Pen pen)
         {
-            g.DrawLine(pen, MiddlePoint, RightMiddlePoint);
+            g.DrawLine(pen, CenterPoint, RightMiddlePoint);
 
             g.DrawLine(pen, LeftMiddlePoint, TopMiddlePoint);
             g.DrawLine(pen, LeftMiddlePoint, BottomMiddlePoint);

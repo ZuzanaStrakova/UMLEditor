@@ -9,6 +9,12 @@ namespace UMLEditor.Components.UML
 {
     public class UmlDiagram : UmlObject
     {
+
+        private static JsonSerializerSettings jsonSettings = new JsonSerializerSettings
+        {
+            Formatting = Formatting.Indented
+        };
+
         public UmlDiagram() : base(null)
         {
 
@@ -16,12 +22,12 @@ namespace UMLEditor.Components.UML
 
         public string SerializeToJSON()
         {
-            return JsonConvert.SerializeObject(this);
+            return JsonConvert.SerializeObject(this, jsonSettings);
         }
 
         public static UmlDiagram? DeserializeJSON(string json)
         {
-            return JsonConvert.DeserializeObject<UmlDiagram>(json);
+            return JsonConvert.DeserializeObject<UmlDiagram>(json, jsonSettings);
         }
 
         public void SaveTo(string fileName)
@@ -36,6 +42,8 @@ namespace UMLEditor.Components.UML
 
         public override void Draw(Graphics g)
         {
+            g.Clear(Color.LightGray);
+
             base.Draw(g);
         }
     }
