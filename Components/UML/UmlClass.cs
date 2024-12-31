@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
-using UMLEditor.Components.UML.DataStructures;
 using UMLEditor.Components.UML.Enums;
 using UMLEditor.Interfaces;
 

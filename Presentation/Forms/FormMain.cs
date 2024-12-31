@@ -1,4 +1,5 @@
 using UMLEditor.Components.UML;
+using UMLEditor.Components.UML.Enums;
 
 namespace UMLEditor
 {
@@ -36,13 +37,84 @@ namespace UMLEditor
             diagram.Children.Add(connector);
         }
 
-        private void FormMain_Paint(object sender, PaintEventArgs e)
+        private void pictureBox_Paint(object sender, PaintEventArgs e)
         {
-            var g = canvasControl1.GetGraphics();
+            Graphics g = e.Graphics;
 
             g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
 
             diagram.Draw(g);
         }
+
+        /*
+        private void FormMain_Paint(object sender, PaintEventArgs e)
+        {
+            var g = pictureBox.GetGraphics();
+
+            g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+
+            diagram.Draw(g);
+        }
+        */
+
+        private bool isDragging = false;
+        private Point startPoint = new Point(0, 0);
+        private UmlObject? selectedObject = null;
+
+        private void pictureBox_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                startPoint = e.Location;
+                isDragging = false;
+
+                // kód pro výbìr objektu 
+                selectedObject = diagram.ObjectFromPoint(e.X, e.Y);
+                if (selectedObject != null)
+                {
+                    selectedObject.Select();
+                    Refresh();
+                }
+            }
+        }
+
+        private void pictureBox_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                if (isDragging)
+                {
+                    // Kód pro ukonèení drag & drop
+                }
+                else
+                {
+                    // Kód pro kliknutí
+                }
+            }
+
+            // Kód pro zrušení výbìru
+            if (selectedObject != null)
+            {
+                selectedObject.Unselect();
+                selectedObject = null;
+                Refresh();
+            }
+        }
+
+        private void pictureBox_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left) // myš se hýbe a je stisknuté levé tlaèítko (mùže být tøes ruky nebo zámìrý drag & drop) -------------------
+            {
+                isDragging = true;
+                // Kód pro pøetažení objektu
+                if (selectedObject != null)
+                {
+                    selectedObject.Position += new SizeF(e.X - startPoint.X, e.Y - startPoint.Y);
+                    startPoint = e.Location;
+                    Refresh();
+                }
+            }
+        }
+
     }
 }
