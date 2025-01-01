@@ -22,17 +22,32 @@ namespace UMLEditor.Components.UML
 
         }
 
-        //public override SizeF Size
-        //{ 
-        //    get => new SizeF(Parent?.Size.Width ?? base.Size.Width, this.Font.Height + 5);
-        //    set => new SizeF(value.Width, value.Height); 
-        //}
+        public override SizeF Size
+        {
+            get => new SizeF(Parent?.Size.Width ?? base.Size.Width, this.Font.Height + 5);
+            set => new SizeF(value.Width, value.Height);
+        }
+
 
         //public override PointF Position 
         //{ 
         //    get => new PointF(0, base.Position.Y); 
         //    set => new PointF(0, value.Y); 
         //}
+
+        public override void Draw(Graphics g)
+        {
+            Brush brush = Brushes.White;
+
+            if (IsClassOrInterface)
+            {
+                brush = Brushes.AliceBlue;
+            }
+
+            g.FillRectangle(brush, new RectangleF(0, 0, Size.Width, Size.Height));
+
+            base.Draw(g);
+        }
 
 
         public void ValidateMethod()

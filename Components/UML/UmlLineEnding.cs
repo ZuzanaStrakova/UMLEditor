@@ -11,11 +11,6 @@ namespace UMLEditor.Components.UML
     public class UmlLineEnding : UmlObject
     {
         public ConnectionType Type { get; set; }
-        public Multiplicity Multiplicity { get; set; }
-        private PointF LeftMiddlePoint   { get => new PointF(0, Size.Height / 2); }
-        private PointF TopMiddlePoint    { get => new PointF(Size.Width / 2, 0); }
-        private PointF RightMiddlePoint  { get => new PointF(Size.Width, Size.Height / 2); }
-        private PointF BottomMiddlePoint { get => new PointF(Size.Width / 2, Size.Height); }
         public PointF ConnectionPoint { get => new PointF(Size.Width * 3 / 2, Size.Height / 2); }
 
         public UmlLineEnding(UmlObject parent) : base(parent)

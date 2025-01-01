@@ -12,6 +12,9 @@ namespace UMLEditor.Components.UML
 
         private static JsonSerializerSettings jsonSettings = new JsonSerializerSettings
         {
+            ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor, // umožnění deserializování objektů, kterým chybí default konstruktor
+            PreserveReferencesHandling = PreserveReferencesHandling.Objects,            // UmlConnector drží odkaz na UmlProperty, při deserializaci vznikne nová instance UmlProperty => toto nastavení zajistí, aby se UmlConnector odkazoval na tuto novou UmlProperty
+            TypeNameHandling = TypeNameHandling.All,
             Formatting = Formatting.Indented
         };
 

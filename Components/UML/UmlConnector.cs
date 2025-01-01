@@ -6,47 +6,27 @@ using System.Threading.Tasks;
 using UMLEditor.Interfaces;
 using UMLEditor.Components.UML.Enums;
 using Newtonsoft.Json.Linq;
+using System.ComponentModel.DataAnnotations;
 
 namespace UMLEditor.Components.UML
 {
     public class UmlConnector : UmlObject
     {
-        public static UmlConnector EmptyObject { get; set; } = new UmlConnector(null);
+        public UmlClass? StartObject { get; set; }
+        public UmlClass? EndObject { get; set; }
+        public ConnectionType Type { get; set; } = ConnectionType.Association;
+        public int MinMultiplicity { get; set; } = 0;
+        public int MaxMultiplicity { get; set; } = int.MaxValue;
 
-        public UmlObject StartObject { get; set; } = EmptyObject;
-        public UmlObject EndObject { get; set; } = EmptyObject;
+        private List<PointF> points = new List<PointF>();
 
-        public ConnectionType StartType 
-        { 
-            get => ((UmlLineEnding)Children[0]).Type; 
-            set => ((UmlLineEnding)Children[0]).Type = value; 
-        }
-        public ConnectionType EndType 
-        { 
-            get => ((UmlLineEnding)Children[1]).Type; 
-            set => ((UmlLineEnding)Children[1]).Type = value; 
-        }
-
-        public Multiplicity StartMultiplicity
-        {
-            get => ((UmlLineEnding)Children[0]).Multiplicity;
-            set => ((UmlLineEnding)Children[0]).Multiplicity = value;
-        }
-        public Multiplicity EndMultiplicity
-        {
-            get => ((UmlLineEnding)Children[1]).Multiplicity;
-            set => ((UmlLineEnding)Children[1]).Multiplicity = value;
-        }
-
-
-        public UmlConnector(UmlObject parent, UmlObject startObject, UmlObject endObject, ConnectionType startType, ConnectionType endType, Multiplicity startMultiplicity, Multiplicity endMultiplicity) : this(parent)
+        public UmlConnector(UmlObject parent, UmlClass startObject, UmlClass endObject, ConnectionType type, ConnectionType endType, int minMultiplicity, int maxMultiplicity) : this(parent)
         {
             StartObject = startObject;
-            EndObject = endObject;
-            StartType = startType;
-            EndType = endType;
-            StartMultiplicity = startMultiplicity;
-            EndMultiplicity = endMultiplicity;
+            EndObject   = endObject;
+            Type        = type;
+            MinMultiplicity = minMultiplicity;
+            MaxMultiplicity = maxMultiplicity;
         }
 
         public UmlConnector(UmlObject parent) : base(parent)
@@ -67,7 +47,7 @@ namespace UMLEditor.Components.UML
 
             g.DrawLine(pen, startPoint, endPoint);
 
-            base.Draw(g);   // vykreslení vnořených komponent    
+            base.Draw(g);    // vykreslení vnořených komponent    
         }
 
         public override string GetSourceCode()

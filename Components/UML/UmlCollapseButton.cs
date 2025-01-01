@@ -16,7 +16,7 @@ namespace UMLEditor.Components.UML
 
         public override PointF Position
         {
-            get => new PointF(Parent!.Size.Width - Size.Width, 0); // pozice automaticky odvozena od parenta - v pravém horním rohu
+            get => new PointF(Parent.Size.Width - Size.Width, 0); // pozice automaticky odvozena od parenta - v pravém horním rohu
         }
 
         public override void Draw(Graphics g)

@@ -16,8 +16,6 @@ namespace UMLEditor.Interfaces
         public PointF Position { get; set; }
 
 
-        string GetSourceCode();
-
         public abstract bool IsInCollision(float x, float y);
 
         void Select();

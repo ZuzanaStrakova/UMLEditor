@@ -1,3 +1,4 @@
+using System.Windows.Forms;
 using UMLEditor.Components.UML;
 using UMLEditor.Components.UML.Enums;
 
@@ -26,15 +27,23 @@ namespace UMLEditor
             class2.Size = new SizeF(100, 180);
 
 
-            class1.AddMember("int Id");
-            class1.AddMember("string Prijmeni");
-            class1.AddMember("string Jmeno");
-            class1.AddMember("DateTime DatumNarozeni");
+            class1._fieldsText = """ 
+                                 + Id: Guid
+                                 # Name: string
+                                 - BirthYear: int
+                                 ~ RegistrationDate: DateTime
+                                 """;
+
+            class1._methodsText = """ 
+                                 + ToString(): string
+                                 # GetName(id: Guid): string
+                                 - Register(name: string, birthYear: int)
+                                 """;
 
 
             diagram.Children.Add(class1);
             diagram.Children.Add(class2);
-            diagram.Children.Add(connector);
+            //diagram.Children.Add(connector);
         }
 
         private void pictureBox_Paint(object sender, PaintEventArgs e)
@@ -68,7 +77,7 @@ namespace UMLEditor
                 startPoint = e.Location;
                 isDragging = false;
 
-                // kód pro výbìr objektu 
+                // Kód pro výbìr objektu 
                 selectedObject = diagram.ObjectFromPoint(e.X, e.Y);
                 if (selectedObject != null)
                 {
@@ -103,18 +112,87 @@ namespace UMLEditor
 
         private void pictureBox_MouseMove(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left) // myš se hýbe a je stisknuté levé tlaèítko (mùže být tøes ruky nebo zámìrý drag & drop) -------------------
+            if (e.Button == MouseButtons.Left) // myš se hýbe a je stisknuté levé tlaèítko (mùže to být tøes ruky nebo zámìrý drag & drop)
             {
-                isDragging = true;
-                // Kód pro pøetažení objektu
-                if (selectedObject != null)
+                if (Math.Abs(e.X - startPoint.X) > SystemInformation.DoubleClickSize.Width ||
+                    Math.Abs(e.Y - startPoint.Y) > SystemInformation.DoubleClickSize.Height) // pokud je posunutí vìtší než tolerance, je to zámìr
                 {
-                    selectedObject.Position += new SizeF(e.X - startPoint.X, e.Y - startPoint.Y);
-                    startPoint = e.Location;
-                    Refresh();
+                    isDragging = true;
+                    // Kód pro pøetažení objektu
+                    if (selectedObject != null)
+                    {
+                        selectedObject.Position += new SizeF(e.X - startPoint.X, e.Y - startPoint.Y);
+                        startPoint = e.Location;
+                        Refresh();
+                    }
                 }
             }
         }
 
+        private void cToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (FolderBrowserDialog fd = new FolderBrowserDialog())
+            {
+                fd.Description = "Vyberte složku";
+                fd.ShowNewFolderButton = true;
+
+                if (fd.ShowDialog() == DialogResult.OK)
+                {
+                    string selectedPath = fd.SelectedPath;
+
+                    GenerateCode.GetSourceCode(diagram, selectedPath);
+                }
+            }
+        }
+
+        private void bitmapToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (SaveFileDialog sfd = new SaveFileDialog())
+            {
+                sfd.Filter = "Bitmap files (*.bmp)|*.bmp|All files (*.*)|*.*";
+                sfd.DefaultExt = "*.bmp";
+                sfd.Title = "Save As...";
+
+                if (sfd.ShowDialog() == DialogResult.OK)
+                {
+                    Bitmap bitmap = new Bitmap((int)diagram.Size.Width, (int)diagram.Size.Height);
+
+                    Graphics g = Graphics.FromImage(bitmap);
+
+                    diagram.Draw(g);
+
+                    bitmap.Save(sfd.FileName);
+                }
+            }
+        }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (SaveFileDialog sfd = new SaveFileDialog())
+            {
+                sfd.Filter = "Project files (*.json)|*.json|All files (*.*)|*.*";
+                sfd.DefaultExt = "*.json";
+                sfd.Title = "Save project";
+
+                if (sfd.ShowDialog() == DialogResult.OK)
+                    diagram.SaveTo(sfd.FileName);
+            }
+        }
+
+        private void loadToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog ofd = new OpenFileDialog())
+            {
+                ofd.Filter = "Project files (*.json)|*.json|All files (*.*)|*.*";
+                ofd.DefaultExt = "*.json";
+                ofd.Title = "Open project";
+
+                if (ofd.ShowDialog() == DialogResult.OK)
+                {
+                    diagram = UmlDiagram.Load(ofd.FileName) ?? new UmlDiagram();
+                    Refresh();
+                }
+            }
+        }
     }
 }

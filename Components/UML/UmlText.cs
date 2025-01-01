@@ -11,7 +11,7 @@ namespace UMLEditor.Components.UML
     {
         public virtual string Text { get; set; } = string.Empty;
         public bool Border { get; set; } = false;
-        public Font Font { get; set; } = new Font("Courier", 12);
+        public Font Font { get; set; } = SystemFonts.DefaultFont;
         public Brush Brush { get; set; } = Brushes.Black;
         public Pen Pen { get; set; } = Pens.Black;
 
@@ -26,8 +26,9 @@ namespace UMLEditor.Components.UML
             RectangleF rectangle = new RectangleF(0, 0, Size.Width, Size.Height);
 
             StringFormat format = new StringFormat();
-            format.Alignment = StringAlignment.Center;
+            format.Alignment = StringAlignment.Near;
             format.Trimming = StringTrimming.EllipsisCharacter;
+            format.FormatFlags = StringFormatFlags.NoWrap;
 
             g.DrawString(Text, Font, Brush, rectangle, format);
 
