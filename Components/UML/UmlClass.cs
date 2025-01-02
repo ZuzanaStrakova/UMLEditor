@@ -148,6 +148,5 @@ namespace UMLEditor.Components.UML
         {
             throw new NotImplementedException();
         }
-
     }
 }

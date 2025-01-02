@@ -40,8 +40,8 @@ namespace UMLEditor.Components.UML
 
         public override void Draw(Graphics g)
         {
-            PointF startPoint = ((UmlLineEnding)Children[0]).ConnectionPoint;
-            PointF endPoint = ((UmlLineEnding)Children[1]).ConnectionPoint;
+            PointF startPoint = StartObject.WorldCenterPoint;
+            PointF endPoint = EndObject.WorldCenterPoint;
 
             Pen pen = Selected ? new Pen(Color.CornflowerBlue) : new Pen(Color.Black);
 

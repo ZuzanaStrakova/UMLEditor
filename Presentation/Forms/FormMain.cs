@@ -1,3 +1,4 @@
+using System.Diagnostics.Eventing.Reader;
 using System.Windows.Forms;
 using UMLEditor.Components.UML;
 using UMLEditor.Components.UML.Enums;
@@ -69,11 +70,33 @@ namespace UMLEditor
         private bool isDragging = false;
         private Point startPoint = new Point(0, 0);
         private UmlObject? selectedObject = null;
+        public bool multiSelect = false;
+        public List<UmlClass> multiSelectedObjects = new List<UmlClass>();
 
         private void pictureBox_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
+            if (e.Button == MouseButtons.Left && Control.ModifierKeys == Keys.Shift)
             {
+                multiSelect = true;                    // funguje pouze pro select pøi vytváøení vztahu, shift se nepouští
+
+                selectedObject = diagram.ObjectFromPoint(e.X, e.Y);
+
+                if (selectedObject != null && selectedObject is UmlClass)
+                {
+                    selectedObject.Select();
+                    multiSelectedObjects.Add((UmlClass)selectedObject);
+                    Refresh();
+                }
+
+            }
+            else if(e.Button == MouseButtons.Left)
+            {
+                multiSelectedObjects.Clear();
+                foreach(var item in multiSelectedObjects)
+                {
+                    item.Unselect();
+                }
+
                 startPoint = e.Location;
                 isDragging = false;
 
@@ -102,7 +125,7 @@ namespace UMLEditor
             }
 
             // Kód pro zrušení výbìru
-            if (selectedObject != null)
+            if (selectedObject != null && Control.ModifierKeys != Keys.Shift)
             {
                 selectedObject.Unselect();
                 selectedObject = null;
@@ -192,6 +215,101 @@ namespace UMLEditor
                     diagram = UmlDiagram.Load(ofd.FileName) ?? new UmlDiagram();
                     Refresh();
                 }
+            }
+        }
+
+        private void toolStripButtonNewClass_Click(object sender, EventArgs e)
+        {
+            UmlClass c = new UmlClass(diagram, "ClassName");
+            c.Position = new PointF(150, 250);
+            c.Size = new SizeF(150, 250);
+
+            diagram.Children.Add(c);
+            Refresh();
+        }
+
+        private void toolStripButtonAssociation_Click(object sender, EventArgs e)
+        {
+            if (multiSelect == true && multiSelectedObjects.Count == 2)
+            {
+                UmlConnector line = new UmlConnector(diagram);
+
+                line.StartObject = multiSelectedObjects[0];
+                line.EndObject = multiSelectedObjects[1];
+                line.Type = ConnectionType.Association;
+
+                diagram.Children.Add(line);
+                Refresh();
+            }
+        }
+
+        private void toolStripButtonOneWayAssociation_Click(object sender, EventArgs e)
+        {
+            if (multiSelect == true && multiSelectedObjects.Count == 2)
+            {
+                UmlConnector line = new UmlConnector(diagram);
+
+                line.StartObject = multiSelectedObjects[0];
+                line.EndObject = multiSelectedObjects[1];
+                line.Type = ConnectionType.OneWayAssociation;
+
+                diagram.Children.Add(line);
+                Refresh();
+            }
+        }
+
+        private void toolStripButtonAggregation_Click(object sender, EventArgs e)
+        {
+            if (multiSelect == true && multiSelectedObjects.Count == 2)
+            {
+                UmlConnector line = new UmlConnector(diagram);
+
+                line.StartObject = multiSelectedObjects[0];
+                line.EndObject = multiSelectedObjects[1];
+                line.Type = ConnectionType.Aggregation;
+
+                diagram.Children.Add(line);
+                Refresh();
+            }
+        }
+
+        private void toolStripButtonComposition_Click(object sender, EventArgs e)
+        {
+            if (multiSelect == true && multiSelectedObjects.Count == 2)
+            {
+                UmlConnector line = new UmlConnector(diagram);
+
+                line.StartObject = multiSelectedObjects[0];
+                line.EndObject = multiSelectedObjects[1];
+                line.Type = ConnectionType.Composition;
+
+                diagram.Children.Add(line);
+                Refresh();
+            }
+        }
+
+        private void toolStripButtonGeneralization_Click(object sender, EventArgs e)
+        {
+            if (multiSelect == true && multiSelectedObjects.Count == 2)
+            {
+                UmlConnector line = new UmlConnector(diagram);
+
+                line.StartObject = multiSelectedObjects[0];
+                line.EndObject = multiSelectedObjects[1];
+                line.Type = ConnectionType.Generalization;
+
+                diagram.Children.Add(line);
+                Refresh();
+            }
+        }
+
+        private void toolStripButtonBin_Click(object sender, EventArgs e)
+        {
+            // doimplementovat kód
+            //if ()
+            {
+                diagram.Children.Remove(selectedObject);
+                Refresh();
             }
         }
     }
