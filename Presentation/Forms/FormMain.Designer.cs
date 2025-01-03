@@ -150,6 +150,7 @@
             pictureBox.TabIndex = 0;
             pictureBox.TabStop = false;
             pictureBox.Paint += pictureBox_Paint;
+            pictureBox.MouseDoubleClick += pictureBox_MouseDoubleClick;
             pictureBox.MouseDown += pictureBox_MouseDown;
             pictureBox.MouseMove += pictureBox_MouseMove;
             pictureBox.MouseUp += pictureBox_MouseUp;
@@ -242,6 +243,7 @@
             Name = "FormMain";
             Text = "UML designer";
             Load += FormMain_Load;
+            KeyDown += FormMain_KeyDown;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             toolStrip1.ResumeLayout(false);

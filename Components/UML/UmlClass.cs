@@ -1,46 +1,66 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Windows.Forms.VisualStyles;
 using UMLEditor.Components.UML.DataStructures;
-using UMLEditor.Components.UML.Enums;
-using UMLEditor.Interfaces;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace UMLEditor.Components.UML
 {
     public class UmlClass : UmlObject
     {
-        public string ClassName { get; set; } = string.Empty;
+        public string ClassName   { get => textBoxClassName.Text; set => textBoxClassName.Text = value; }
+        public string FieldsText  { get => textBoxFields.Text; set => textBoxFields.Text = value; }
+        public string MethodsText { get => textBoxMethods.Text; set => textBoxMethods.Text = value; }
 
-        public string _fieldsText { get; set; }  = string.Empty;   // definice fieldů a metod uchovávána jakožto víceřádkový text, který se přímo zobrazuje či edituje v GUI
-        public string _methodsText { get; set; }  = string.Empty;
-
-        public List<Field> Fields { get => ParseFields(_fieldsText); }
-
-        public List<Method> Methods { get => ParseMethods(_methodsText); }
+        public List<Field> Fields   { get => ParseFields(FieldsText); }
+        public List<Method> Methods { get => ParseMethods(MethodsText); }
 
         public bool Collapsed { get; set; } = false;
 
+        // child komponenty
+        private UmlTextBox textBoxClassName;
+        private UmlTextBox textBoxFields;
+        private UmlTextBox textBoxMethods;
+        private UmlCollapseButton collapseButton;
+        private UmlResizeHandle resizeHandle;
 
         public UmlClass(UmlObject parent, string className) : base(parent)
         {
             Size = new SizeF(100, 100);
-            ClassName = className;
 
-            Children.Add(new UmlCollapseButton(this));
-            Children.Add(new UmlResizeHandle(this));
+            textBoxClassName = new UmlTextBox(this) { Border = true };
+            textBoxFields    = new UmlTextBox(this) { Multiline = true, Border = true };
+            textBoxMethods   = new UmlTextBox(this) { Multiline = true };
+            collapseButton   = new UmlCollapseButton(this);
+            resizeHandle     = new UmlResizeHandle(this);
+
+            Children.Add(textBoxClassName);
+            Children.Add(textBoxFields);
+            Children.Add(textBoxMethods);
+            Children.Add(collapseButton);
+            Children.Add(resizeHandle);
+
+            ClassName = className;
+        }
+
+        private void RefreshLayout()
+        {
+            textBoxClassName.Position  = new PointF(0, 0);
+            textBoxClassName.Size      = new SizeF(Size.Width, textBoxClassName.TextSize().Height+10);
+
+            textBoxFields.Position = new PointF(0, textBoxClassName.Position.Y + textBoxClassName.Size.Height);
+            textBoxFields.Size     = new SizeF(Size.Width, textBoxFields.TextSize().Height+10);
+
+            textBoxMethods.Position = new PointF(0, textBoxFields.Position.Y + textBoxFields.Size.Height);
+            textBoxMethods.Size     = new SizeF(Size.Width, textBoxMethods.TextSize().Height+10);
         }
 
         public override void Draw(Graphics g)
         {
+            RefreshLayout();
+
             g.FillRectangle(Brushes.White, 0, 0, Size.Width, Size.Height);
 
-            g.DrawRectangle(Selected ? Pens.Red : Pens.Black, 0, 0, Size.Width, Size.Height);
-
             base.Draw(g);
+
+            g.DrawRectangle(Selected ? Pens.Red : Pens.Black, 0, 0, Size.Width, Size.Height);
         }
 
         private List<Field> ParseFields(string text)
@@ -148,5 +168,6 @@ namespace UMLEditor.Components.UML
         {
             throw new NotImplementedException();
         }
+
     }
 }

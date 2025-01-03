@@ -8,7 +8,7 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace UMLEditor.Components.UML
 {
-    internal class UmlMultiplicity : UmlText
+    internal class UmlMultiplicity : UmlTextBox
     {
         int Min { get; set; } = 0;
         int Max { get; set; } = int.MaxValue;

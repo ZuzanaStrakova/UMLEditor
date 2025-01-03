@@ -28,14 +28,14 @@ namespace UMLEditor
             class2.Size = new SizeF(100, 180);
 
 
-            class1._fieldsText = """ 
+            class1.FieldsText = """ 
                                  + Id: Guid
                                  # Name: string
                                  - BirthYear: int
                                  ~ RegistrationDate: DateTime
                                  """;
 
-            class1._methodsText = """ 
+            class1.MethodsText = """ 
                                  + ToString(): string
                                  # GetName(id: Guid): string
                                  - Register(name: string, birthYear: int)
@@ -104,6 +104,8 @@ namespace UMLEditor
                 selectedObject = diagram.ObjectFromPoint(e.X, e.Y);
                 if (selectedObject != null)
                 {
+                    if (selectedObject is UmlTextBox && selectedObject.Parent != null) // místo textových objektù zvolí jejich parenta, textové objekty reagují jen na dvojklik
+                        selectedObject = selectedObject.Parent;
                     selectedObject.Select();
                     Refresh();
                 }
@@ -149,6 +151,31 @@ namespace UMLEditor
                         Refresh();
                     }
                 }
+            }
+        }
+
+        private void pictureBox_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (selectedObject != null)
+            {
+                selectedObject.Unselect();
+            }
+
+            selectedObject = diagram.ObjectFromPoint(e.X, e.Y);
+
+            if (selectedObject is UmlTextBox)
+            {
+                selectedObject.Select();
+                ((UmlTextBox)selectedObject).StartEditing(pictureBox);
+                Refresh();
+            }
+        }
+
+        private void FormMain_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (selectedObject is UmlTextBox)
+            {
+                //((UmlTextBox)selectedObject).HandleKeyPress(e.KeyCode, e.Control); ... zatím není potøeba
             }
         }
 

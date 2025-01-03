@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace UMLEditor.Components.UML
 {
-    public class UmlClassMember : UmlText
+    public class UmlClassMember : UmlTextBox
     {
         public bool IsClassOrInterface { get => Text.StartsWith("class") || Text.StartsWith("interface"); }
 

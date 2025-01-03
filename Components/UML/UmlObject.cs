@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
@@ -14,29 +15,48 @@ namespace UMLEditor.Components.UML
     {
         public UmlObject? Parent {  get; set; }
         public List<UmlObject> Children { get; set; } = new List<UmlObject>();
+        [JsonIgnore]
         public bool Selected { get; set; }
         public virtual SizeF Size { get; set; }
         public virtual PointF Position { get; set; }
 
+        [JsonIgnore]
         public PointF CenterPoint       { get => new PointF(Size.Width / 2, Size.Height / 2); }
+        [JsonIgnore]
         public PointF TopLeftCorner     { get => new PointF(0, 0); }
+        [JsonIgnore]
         public PointF TopRightCorner    { get => new PointF(Size.Width, 0); }
+        [JsonIgnore]
         public PointF BottomLeftCorner  { get => new PointF(0, Size.Height); }
+        [JsonIgnore]
         public PointF BottomRightCorner { get => new PointF(Size.Width, Size.Height); }
+        [JsonIgnore]
         public PointF LeftMiddlePoint   { get => new PointF(0, Size.Height / 2); }
+        [JsonIgnore]
         public PointF TopMiddlePoint    { get => new PointF(Size.Width / 2, 0); }
+        [JsonIgnore]
         public PointF RightMiddlePoint  { get => new PointF(Size.Width, Size.Height / 2); }
+        [JsonIgnore]
         public PointF BottomMiddlePoint { get => new PointF(Size.Width / 2, Size.Height); }
 
         // zřejmě nebude potřeba (budoucí využití pouze pro connector)
-        public PointF WorldCenterPoint       { get => LocalToGlobal(CenterPoint      );} 
-        public PointF WorldTopLeftCorner     { get => LocalToGlobal(TopLeftCorner    );} 
-        public PointF WorldTopRightCorner    { get => LocalToGlobal(TopRightCorner   );} 
-        public PointF WorldBottomLeftCorner  { get => LocalToGlobal(BottomLeftCorner );} 
-        public PointF WorldBottomRightCorner { get => LocalToGlobal(BottomRightCorner);} 
-        public PointF WorldLeftMiddlePoint   { get => LocalToGlobal(LeftMiddlePoint  );} 
-        public PointF WorldTopMiddlePoint    { get => LocalToGlobal(TopMiddlePoint   );} 
-        public PointF WorldRightMiddlePoint  { get => LocalToGlobal(RightMiddlePoint );} 
+        [JsonIgnore]
+        public PointF WorldCenterPoint       { get => LocalToGlobal(CenterPoint      );}
+        [JsonIgnore]
+        public PointF WorldTopLeftCorner     { get => LocalToGlobal(TopLeftCorner    );}
+        [JsonIgnore]
+        public PointF WorldTopRightCorner    { get => LocalToGlobal(TopRightCorner   );}
+        [JsonIgnore]
+        public PointF WorldBottomLeftCorner  { get => LocalToGlobal(BottomLeftCorner );}
+        [JsonIgnore]
+        public PointF WorldBottomRightCorner { get => LocalToGlobal(BottomRightCorner);}
+        [JsonIgnore]
+        public PointF WorldLeftMiddlePoint   { get => LocalToGlobal(LeftMiddlePoint  );}
+        [JsonIgnore]
+        public PointF WorldTopMiddlePoint    { get => LocalToGlobal(TopMiddlePoint   );}
+        [JsonIgnore]
+        public PointF WorldRightMiddlePoint  { get => LocalToGlobal(RightMiddlePoint );}
+        [JsonIgnore]
         public PointF WorldBottomMiddlePoint { get => LocalToGlobal(BottomMiddlePoint);} 
 
 
@@ -99,7 +119,11 @@ namespace UMLEditor.Components.UML
         public virtual void Draw(Graphics g)
         {
             var originalTransform = g.Transform;
-            
+
+            //var savepoint = g.Save();
+
+            //g.SetClip(new RectangleF(this.Position, this.Size));
+
             foreach (var child in Children)    // rekurzivní vykreslení všech podobjektů
             {
                 g.TranslateTransform(child.Position.X, child.Position.Y);    // posunutí grafického kontextu na 0;0 - v levém horním rohu potomka
@@ -108,6 +132,8 @@ namespace UMLEditor.Components.UML
 
                 g.Transform = originalTransform;    // obnovení transformace
             }
+
+            //g.Restore(savepoint);
         }
 
         public virtual string GetSourceCode()

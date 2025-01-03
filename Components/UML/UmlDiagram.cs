@@ -15,6 +15,8 @@ namespace UMLEditor.Components.UML
             ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor, // umožnění deserializování objektů, kterým chybí default konstruktor
             PreserveReferencesHandling = PreserveReferencesHandling.Objects,            // UmlConnector drží odkaz na UmlProperty, při deserializaci vznikne nová instance UmlProperty => toto nastavení zajistí, aby se UmlConnector odkazoval na tuto novou UmlProperty
             TypeNameHandling = TypeNameHandling.All,
+            NullValueHandling = NullValueHandling.Ignore,
+            DefaultValueHandling = DefaultValueHandling.Ignore,
             Formatting = Formatting.Indented
         };
 
