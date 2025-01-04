@@ -259,11 +259,10 @@ namespace UMLEditor
         {
             if (multiSelect == true && multiSelectedObjects.Count == 2)
             {
-                UmlConnector line = new UmlConnector(diagram);
+                UmlConnector line = new UmlConnector(diagram, ConnectionType.Association);
 
                 line.StartObject = multiSelectedObjects[0];
                 line.EndObject = multiSelectedObjects[1];
-                line.Type = ConnectionType.Association;
 
                 diagram.Children.Add(line);
                 Refresh();
@@ -274,11 +273,10 @@ namespace UMLEditor
         {
             if (multiSelect == true && multiSelectedObjects.Count == 2)
             {
-                UmlConnector line = new UmlConnector(diagram);
+                UmlConnector line = new UmlConnector(diagram, ConnectionType.OneWayAssociation);
 
                 line.StartObject = multiSelectedObjects[0];
                 line.EndObject = multiSelectedObjects[1];
-                line.Type = ConnectionType.OneWayAssociation;
 
                 diagram.Children.Add(line);
                 Refresh();
@@ -289,11 +287,10 @@ namespace UMLEditor
         {
             if (multiSelect == true && multiSelectedObjects.Count == 2)
             {
-                UmlConnector line = new UmlConnector(diagram);
+                UmlConnector line = new UmlConnector(diagram, ConnectionType.Aggregation);
 
                 line.StartObject = multiSelectedObjects[0];
                 line.EndObject = multiSelectedObjects[1];
-                line.Type = ConnectionType.Aggregation;
 
                 diagram.Children.Add(line);
                 Refresh();
@@ -304,11 +301,10 @@ namespace UMLEditor
         {
             if (multiSelect == true && multiSelectedObjects.Count == 2)
             {
-                UmlConnector line = new UmlConnector(diagram);
+                UmlConnector line = new UmlConnector(diagram, ConnectionType.Composition);
 
                 line.StartObject = multiSelectedObjects[0];
                 line.EndObject = multiSelectedObjects[1];
-                line.Type = ConnectionType.Composition;
 
                 diagram.Children.Add(line);
                 Refresh();
@@ -319,11 +315,10 @@ namespace UMLEditor
         {
             if (multiSelect == true && multiSelectedObjects.Count == 2)
             {
-                UmlConnector line = new UmlConnector(diagram);
+                UmlConnector line = new UmlConnector(diagram, ConnectionType.Generalization);
 
                 line.StartObject = multiSelectedObjects[0];
                 line.EndObject = multiSelectedObjects[1];
-                line.Type = ConnectionType.Generalization;
 
                 diagram.Children.Add(line);
                 Refresh();
@@ -332,10 +327,21 @@ namespace UMLEditor
 
         private void toolStripButtonBin_Click(object sender, EventArgs e)
         {
-            // doimplementovat kód
-            //if ()
+            if (multiSelect)
             {
-                diagram.Children.Remove(selectedObject);
+                foreach (UmlObject item in multiSelectedObjects)
+                {
+                    diagram.Children.Remove(item);
+                    Refresh();
+                }
+            }
+            //else if (selectedObject != null)
+            //{
+            //    diagram.Children.Remove(selectedObject);
+            //    Refresh();
+            //}
+            else
+            {
                 Refresh();
             }
         }

@@ -164,10 +164,5 @@ namespace UMLEditor.Components.UML
             }
         }
 
-        public override string GetSourceCode()
-        {
-            throw new NotImplementedException();
-        }
-
     }
 }

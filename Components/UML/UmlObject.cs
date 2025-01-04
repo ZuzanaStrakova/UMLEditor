@@ -136,10 +136,6 @@ namespace UMLEditor.Components.UML
             //g.Restore(savepoint);
         }
 
-        public virtual string GetSourceCode()
-        {
-            throw new NotImplementedException();
-        }
 
         /* test kolize s bodem vyjádřeným v souřadném systému parenta
         public virtual bool IsInCollision(float x, float y)
