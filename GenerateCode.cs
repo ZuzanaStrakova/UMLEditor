@@ -115,7 +115,7 @@ namespace UMLEditor
 
         public static IEnumerable<ConnectionInfo> GetConnections(UmlDiagram diagram, UmlClass c)
         {
-            return diagram.Children.OfType<UmlConnector>().Where(x => x.StartObject == c).Select(x => new ConnectionInfo() { ClassName = x.EndObject?.ClassName??"", Type = x.Type, Multiplicity = x.Multiplicity});
+            return diagram.Children.OfType<UmlConnector>().Where(x => x.StartObject == c).Select(x => new ConnectionInfo() { ClassName = x.EndObject?.ClassName??"", Type = x.Type, Multiplicity = x.EndMultiplicity});
         }
     }
 
