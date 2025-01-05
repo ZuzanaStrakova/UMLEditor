@@ -16,8 +16,11 @@ namespace UMLEditor
 
         private void FormMain_Load(object sender, EventArgs e)
         {
-            UmlClass class1 = new UmlClass(diagram, "Client");
-            UmlClass class2 = new UmlClass(diagram, "IPerson");
+            diagram.Position = new PointF(0, 0);
+            diagram.Size = pictureBox.Size;
+            /*
+            UmlClass class1 = new UmlClass(diagram, "Client", "", "");
+            UmlClass class2 = new UmlClass(diagram, "IPerson", "", "");
             UmlConnector connector = new UmlConnector(diagram);
 
             diagram.Position = new PointF(0, 0);
@@ -44,7 +47,8 @@ namespace UMLEditor
 
             diagram.Children.Add(class1);
             diagram.Children.Add(class2);
-            //diagram.Children.Add(connector);
+            diagram.Children.Add(connector);
+            */
         }
 
         private void pictureBox_Paint(object sender, PaintEventArgs e)
@@ -77,11 +81,17 @@ namespace UMLEditor
         {
             if (e.Button == MouseButtons.Left && Control.ModifierKeys == Keys.Shift)
             {
-                multiSelect = true;                    // funguje pouze pro select pøi vytváøení vztahu, shift se nepouští
+                startPoint = e.Location;
+                multiSelect = true;               // funguje pouze pro select pøi vytváøení vztahu, shift se nepouští
 
                 selectedObject = diagram.ObjectFromPoint(e.X, e.Y);
 
-                if (selectedObject != null && selectedObject is UmlClass)
+                if (selectedObject is UmlTextBox) // místo textových objektù vyselectím jejich parenta, textové objekty reagují jen na dvojklik
+                {
+                    selectedObject = selectedObject.Parent;
+                }
+
+                if (selectedObject is UmlClass)
                 {
                     selectedObject.Select();
                     multiSelectedObjects.Add((UmlClass)selectedObject);
@@ -91,11 +101,11 @@ namespace UMLEditor
             }
             else if(e.Button == MouseButtons.Left)
             {
-                multiSelectedObjects.Clear();
-                foreach(var item in multiSelectedObjects)
+                foreach (var item in multiSelectedObjects)
                 {
                     item.Unselect();
                 }
+                multiSelectedObjects.Clear();
 
                 startPoint = e.Location;
                 isDragging = false;
@@ -107,6 +117,15 @@ namespace UMLEditor
                     if (selectedObject is UmlTextBox && selectedObject.Parent != null) // místo textových objektù zvolí jejich parenta, textové objekty reagují jen na dvojklik
                         selectedObject = selectedObject.Parent;
                     selectedObject.Select();
+                    Refresh();
+                }
+            }
+            else if (e.Button == MouseButtons.Right)
+            {
+                UmlMultiplicity? multiplicity = diagram.ObjectFromPoint(e.X, e.Y) as UmlMultiplicity;
+                if (multiplicity != null)
+                {
+                    multiplicity.OnRightMouseButtonClick();
                     Refresh();
                 }
             }
@@ -247,7 +266,7 @@ namespace UMLEditor
 
         private void toolStripButtonNewClass_Click(object sender, EventArgs e)
         {
-            UmlClass c = new UmlClass(diagram, "ClassName");
+            UmlClass c = new UmlClass(diagram, "ClassName", "+ Id: int", "+ GetId(): int");
             c.Position = new PointF(150, 250);
             c.Size = new SizeF(150, 250);
 

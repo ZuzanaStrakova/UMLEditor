@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms.VisualStyles;
+﻿using Newtonsoft.Json;
+using System.Windows.Forms.VisualStyles;
 using UMLEditor.Components.UML.DataStructures;
 
 namespace UMLEditor.Components.UML
@@ -9,10 +10,15 @@ namespace UMLEditor.Components.UML
         public string FieldsText  { get => textBoxFields.Text; set => textBoxFields.Text = value; }
         public string MethodsText { get => textBoxMethods.Text; set => textBoxMethods.Text = value; }
 
-        public List<Field> Fields   { get => ParseFields(FieldsText); }
+        [JsonIgnore]
+        public List<Field> Fields { get => ParseFields(FieldsText); }
+        [JsonIgnore]
         public List<Method> Methods { get => ParseMethods(MethodsText); }
 
         public bool Collapsed { get; set; } = false;
+
+        [JsonIgnore]
+        private SizeF MinSize { get => new SizeF(70, 22);  } 
 
         // child komponenty
         private UmlTextBox textBoxClassName;
@@ -21,8 +27,9 @@ namespace UMLEditor.Components.UML
         private UmlCollapseButton collapseButton;
         private UmlResizeHandle resizeHandle;
 
-        public UmlClass(UmlObject parent, string className) : base(parent)
+        public UmlClass(UmlObject parent, string className, string fields, string methods) : base(parent)
         {
+            Position = new PointF(0, 0);
             Size = new SizeF(100, 100);
 
             textBoxClassName = new UmlTextBox(this) { Border = true };
@@ -38,10 +45,15 @@ namespace UMLEditor.Components.UML
             Children.Add(resizeHandle);
 
             ClassName = className;
+            FieldsText = fields;
+            MethodsText = methods;
         }
 
         private void RefreshLayout()
         {
+            if (Size.Width  < MinSize.Width ) Size = new SizeF(MinSize.Width, Size.Height);
+            if (Size.Height < MinSize.Height) Size = new SizeF(Size.Width, MinSize.Height);
+
             textBoxClassName.Position  = new PointF(0, 0);
             textBoxClassName.Size      = new SizeF(Size.Width, textBoxClassName.TextSize().Height+10);
 
@@ -50,6 +62,7 @@ namespace UMLEditor.Components.UML
 
             textBoxMethods.Position = new PointF(0, textBoxFields.Position.Y + textBoxFields.Size.Height);
             textBoxMethods.Size     = new SizeF(Size.Width, textBoxMethods.TextSize().Height+10);
+
         }
 
         public override void Draw(Graphics g)
@@ -58,7 +71,11 @@ namespace UMLEditor.Components.UML
 
             g.FillRectangle(Brushes.White, 0, 0, Size.Width, Size.Height);
 
+            g.SetClip(new RectangleF(0, 0, Size.Width, Size.Height));
+
             base.Draw(g);
+
+            g.ResetClip();
 
             g.DrawRectangle(Selected ? Pens.Red : Pens.Black, 0, 0, Size.Width, Size.Height);
         }

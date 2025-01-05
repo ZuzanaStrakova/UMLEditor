@@ -101,18 +101,22 @@ namespace UMLEditor.Components.UML
             float local_x = x - Position.X;                           // převedení na své lokální souřadnice
             float local_y = y - Position.Y;
 
-            if (!IsInCollision(local_x, local_y)) return null;
+            if (local_x < 0 || local_x >= Size.Width ) return null;   // hrubé síto, pokud bod neleží v oblasti tohto objektu, nemůže být v kolizi on ani jeho děti
+            if (local_y < 0 || local_y >= Size.Height) return null;
 
-            // nastala kolize, ale objekt může být schován pod svými potomky, kteří se vykreslují později a překrývají ho
+            // děti překrývají parenta, proto mají přednost
 
             for (int i = Children.Count - 1; i >= 0; i--)             // => procházení potomků v opačném pořadí, aby bylo zaručeno nalezení těch překrývajících
             {
                 UmlObject child = Children[i];
                 UmlObject? result = child.ObjectFromPoint(local_x, local_y);
-                if (result != null) return result;                    // tento potomek objekt překrývá a stejně jako on koliduje s bodem => má předonost
+                if (result != null)
+                {
+                    return result;                                    // tento potomek koliduje
+                }
             }
 
-            return this;                                              // žádné překrývání
+            return IsInCollision(local_x, local_y) ? this : null;     // tento objekt prošel sítem, ale jeho IsInCollision může vrátit false, pokud objekt nechce být klikem zasažen
         }
 
 
@@ -122,15 +126,17 @@ namespace UMLEditor.Components.UML
 
             //var savepoint = g.Save();
 
-            //g.SetClip(new RectangleF(this.Position, this.Size));
-
             foreach (var child in Children)    // rekurzivní vykreslení všech podobjektů
             {
+                //g.SetClip(new RectangleF(0, 0, Size.Width, Size.Height)); // cokoliv childy nakreslí mimo obdélník svého rodiče, nesmí být vidět
+
                 g.TranslateTransform(child.Position.X, child.Position.Y);    // posunutí grafického kontextu na 0;0 - v levém horním rohu potomka
 
                 child.Draw(g);
 
-                g.Transform = originalTransform;    // obnovení transformace
+                g.Transform = originalTransform;    // obnovení původí transformace
+
+                //g.ResetClip();
             }
 
             //g.Restore(savepoint);
